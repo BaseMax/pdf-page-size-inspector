@@ -59,7 +59,13 @@ function getOrientation(width, height) {
 }
 
 function calculateAspectRatio(width, height) {
-  const gcd = (a, b) => b === 0 ? a : gcd(b, a % b);
+  // Iterative GCD to avoid stack overflow with large numbers
+  const gcd = (a, b) => {
+    while (b !== 0) {
+      [a, b] = [b, a % b];
+    }
+    return a;
+  };
   const divisor = gcd(Math.round(width), Math.round(height));
   const w = Math.round(width / divisor);
   const h = Math.round(height / divisor);
@@ -237,9 +243,11 @@ function displayStatistics(results, paperTypes) {
   paperTypes.forEach(type => {
     paperCount[type] = (paperCount[type] || 0) + 1;
   });
-  const mostCommonPaper = Object.keys(paperCount).reduce((a, b) => 
-    paperCount[a] > paperCount[b] ? a : b
-  );
+  const mostCommonPaper = Object.keys(paperCount).length > 0
+    ? Object.keys(paperCount).reduce((a, b) => 
+        paperCount[a] > paperCount[b] ? a : b
+      )
+    : 'None';
 
   // Count orientations
   const orientations = results.map(r => r.orientation);
@@ -345,7 +353,7 @@ copyResultsBtn.addEventListener("click", async () => {
       copyResultsBtn.innerHTML = originalText;
     }, 2000);
   } catch (err) {
-    alert("Failed to copy to clipboard");
+    alert("Failed to copy to clipboard. Please ensure your browser supports clipboard access and try again.");
   }
 });
 
