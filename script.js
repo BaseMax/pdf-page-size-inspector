@@ -16,7 +16,7 @@ const copyResultsBtn = document.getElementById("copyResults");
 
 pdfjsLib.GlobalWorkerOptions.workerSrc = "pdf.worker.min.js";
 
-const PAGE_SIZES = [
+const PAPER_SIZES = [
   // ISO 216 (A series)
   { name: "A0", w: 841, h: 1189 },
   { name: "A1", w: 594, h: 841 },
